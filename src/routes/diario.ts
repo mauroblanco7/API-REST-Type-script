@@ -1,6 +1,8 @@
 import express from 'express' // es6 modules se compilan como commonjs
 // commonjs : const express= require "express"
 import * as diaryServices from '../services/_diarios'
+
+import toNewDiaryEntry from '../utils'
 const router = express.Router()
 
 router.get('/', (_req, res) => {
@@ -14,7 +16,13 @@ router.get('/:id', (req, res) => {
     : res.sendStatus(404)
 })
 
-router.post('/', (_req, res) => {
-  res.send('diarios posteados')
+router.post('/', (req, res) => {
+  try {
+    const newDiaryEntry = toNewDiaryEntry(req.body)
+    const addedDiaryEntry = diaryServices.addDiary(newDiaryEntry)
+    res.json(addedDiaryEntry)
+  } catch (error) {
+    res.status(404).send('Invalid type of entry')
+  }
 })
 export default router

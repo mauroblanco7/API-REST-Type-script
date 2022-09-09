@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import { DiaryEntry, NonSensitiveInfoDiaryEntry } from '../types'
+import { DiaryEntry, NonSensitiveInfoDiaryEntry, newDiaryEntry } from '../types'
 import diarioData from './diarios.json'
 
 const diaries: DiaryEntry[] = diarioData as DiaryEntry[] // Asercion de datos, solo utilizar cuando sea necesario!
@@ -23,4 +23,11 @@ export const getEntriesWithoutSensitiveInfo = (): NonSensitiveInfoDiaryEntry[] =
 }
 
 export const getEntries = (): DiaryEntry[] => diaries
-export const addEntries = (): null => null
+export const addDiary = (newDiaryEntry: newDiaryEntry): DiaryEntry => {
+    const newDiary = {
+        id: Math.max(...diaries.map(d => d.id)) + 1,
+        ...newDiaryEntry
+    }
+    diaries.push(newDiary)
+    return newDiary
+}
